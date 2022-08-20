@@ -1,10 +1,8 @@
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:guess_the_number/domain/use_cases/generate_guess_number.dart';
-import 'package:guess_the_number/domain/use_cases/is_attempts_remain.dart';
-import 'package:guess_the_number/domain/use_cases/make_attempt.dart';
-import 'package:guess_the_number/presentation/bloc/game_bloc.dart';
-import 'package:guess_the_number/presentation/pages/widgets/game_field.dart';
+import 'package:presentation/src/bloc/game_bloc.dart';
+import 'package:presentation/src/pages/widgets/game_field.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -18,7 +16,7 @@ class MainPage extends StatelessWidget {
       ),
       body: BlocProvider<GameBloc>(
         create: (_) => GameBloc(
-          isAttemptsOver: IsAttemptsOver(),
+          decrementAttempts: DecrementAttemptsUseCase(),
           generateGuessNumber: GenerateGuessNumberUseCase(),
           makeAttempt: MakeAttemptUseCase(),
         ),

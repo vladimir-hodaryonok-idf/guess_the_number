@@ -1,0 +1,20 @@
+name: presentation
+description: A starting point for Dart libraries or applications.
+version: 1.0.0
+
+publish_to: 'none'
+
+environment:
+  sdk: '>=2.17.6 <3.0.0'
+  flutter: ">=2.2.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.1
+  equatable: ^2.0.3
+  domain:
+    path: ../domain
+
+dev_dependencies:
+  lints: ^2.0.0

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:guess_the_number/presentation/bloc/game_bloc.dart';
-import 'package:guess_the_number/presentation/bloc/state.dart';
-import 'package:guess_the_number/presentation/pages/widgets/game_form.dart';
+import 'package:presentation/src/bloc/game_bloc.dart';
+import 'package:presentation/src/bloc/state.dart';
+
+import 'game_form.dart';
 
 const attemptsCount = 3;
 

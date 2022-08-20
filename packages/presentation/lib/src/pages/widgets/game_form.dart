@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:guess_the_number/constants/global.dart';
-import 'package:guess_the_number/presentation/bloc/events.dart';
-import 'package:guess_the_number/presentation/bloc/game_bloc.dart';
-import 'package:guess_the_number/presentation/bloc/state.dart';
+import 'package:presentation/src/bloc/events.dart';
+import 'package:presentation/src/bloc/game_bloc.dart';
+import 'package:presentation/src/bloc/state.dart';
+import 'package:presentation/src/constants/global.dart';
 
 class GameForm extends StatelessWidget {
   final GameState state;

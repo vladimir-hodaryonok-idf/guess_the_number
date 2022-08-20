@@ -1,5 +1,6 @@
-import 'package:guess_the_number/domain/models/attempt_params.dart';
-import 'package:guess_the_number/domain/use_cases/base/base_use_case_in_out.dart';
+
+import '../models/attempt_params.dart';
+import 'base/base_use_case_in_out.dart';
 
 class MakeAttemptUseCase extends BaseUseCaseInOut<AttemptParams, bool> {
   @override
