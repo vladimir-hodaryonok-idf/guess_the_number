@@ -1,1 +1,0 @@
-const maxGuessNumber = 10;

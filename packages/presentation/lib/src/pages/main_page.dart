@@ -16,7 +16,6 @@ class MainPage extends StatelessWidget {
       ),
       body: BlocProvider<GameBloc>(
         create: (_) => GameBloc(
-          decrementAttempts: DecrementAttemptsUseCase(),
           generateGuessNumber: GenerateGuessNumberUseCase(),
           makeAttempt: MakeAttemptUseCase(),
         ),
