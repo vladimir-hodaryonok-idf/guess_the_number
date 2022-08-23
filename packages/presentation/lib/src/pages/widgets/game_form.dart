@@ -45,7 +45,7 @@ class GameForm extends StatelessWidget {
       child: TextFormField(
         onChanged: (text) {
           final int number = int.tryParse(text) ?? 0;
-          bloc.add(SetSuggestedNumber(number: number));
+          bloc.add(SetSuggestedNumberEvent(number: number));
         },
         validator: _validator,
         maxLength: 2,
@@ -83,7 +83,7 @@ class Buttons extends StatelessWidget {
                 state is WinState || state is LoseState || state is InitState
                     ? () {
                         _formKey.currentState?.reset();
-                        bloc.add(NewGame());
+                        bloc.add(NewGameEvent());
                       }
                     : null,
             child: const Text('New Game')),
@@ -91,7 +91,7 @@ class Buttons extends StatelessWidget {
             onPressed: state is GameInProgressState
                 ? () {
                     _formKey.currentState?.validate() ?? false
-                        ? bloc.add(MakeAttempt())
+                        ? bloc.add(MakeAttemptEvent())
                         : null;
                   }
                 : null,

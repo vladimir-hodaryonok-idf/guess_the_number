@@ -1,11 +1,11 @@
 abstract class GameEvent {}
 
-class MakeAttempt extends GameEvent {}
+class MakeAttemptEvent extends GameEvent {}
 
-class NewGame extends GameEvent {}
+class NewGameEvent extends GameEvent {}
 
-class SetSuggestedNumber extends GameEvent {
+class SetSuggestedNumberEvent extends GameEvent {
   final int number;
 
-  SetSuggestedNumber({required this.number});
+  SetSuggestedNumberEvent({required this.number});
 }

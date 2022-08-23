@@ -17,9 +17,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     required this.makeAttempt,
     required this.generateGuessNumber,
   }) : super(InitState()) {
-    on<MakeAttempt>((event, emit) => emit(_makeAttempt()));
-    on<NewGame>((event, emit) => emit(_newGame));
-    on<SetSuggestedNumber>((event, emit) => _suggestedNumber = event.number);
+    on<MakeAttemptEvent>((event, emit) => emit(_makeAttempt()));
+    on<NewGameEvent>((event, emit) => emit(_newGame));
+    on<SetSuggestedNumberEvent>((event, emit) => _suggestedNumber = event.number);
   }
 
   GameState get _newGame => GameInProgressState(
