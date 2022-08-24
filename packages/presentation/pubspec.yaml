@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  equatable: ^2.0.3
+  get_it: ^7.2.0
   domain:
     path: ../domain
 

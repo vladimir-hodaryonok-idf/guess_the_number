@@ -1,5 +1,6 @@
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:presentation/src/constants/init_values.dart';
 import 'package:presentation/src/game_bloc/bloc_screen.dart';
 import 'package:presentation/src/game_bloc/bloc_tile.dart';
 import 'package:presentation/src/game_bloc/game_bloc.dart';
@@ -13,13 +14,7 @@ class GameField extends BlocScreen {
 }
 
 class _GameFieldState extends BlocScreenState<GameField, GameBloc> {
-  _GameFieldState()
-      : super(
-          GameBloc(
-            GenerateGuessNumberUseCase(),
-            MakeAttemptUseCase(),
-          ),
-        );
+  _GameFieldState() : super(GetIt.I.get<GameBloc>());
 
   void _showEndGameMessage(String message) {
     WidgetsBinding.instance.addPostFrameCallback(
@@ -34,10 +29,10 @@ class _GameFieldState extends BlocScreenState<GameField, GameBloc> {
     );
   }
 
-  void _showAttemptsRemain(int guessAttemptsCount, BlocTileState state) {
+  void _showAttemptsRemain(int guessAttemptsCount, int attemptsRemain) {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        final message = state == BlocTileState.gameInProgress
+        final message = attemptsRemain == initialAttempts
             ? 'Game started!'
             : 'Attempts left: $guessAttemptsCount';
         ScaffoldMessenger.of(context).showSnackBar(
@@ -63,7 +58,7 @@ class _GameFieldState extends BlocScreenState<GameField, GameBloc> {
           else if (tile.state == BlocTileState.lose)
             _showEndGameMessage('You Lose!');
           else if (tile.state == BlocTileState.gameInProgress)
-            _showAttemptsRemain(tile.attemptsRemain, tile.state);
+            _showAttemptsRemain(tile.attemptsRemain, tile.attemptsRemain);
           return GameForm(
             tile: tile,
             bloc: bloc,
