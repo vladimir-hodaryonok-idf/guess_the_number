@@ -1,54 +1,75 @@
+import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:presentation/src/bloc/game_bloc.dart';
-import 'package:presentation/src/bloc/state.dart';
+import 'package:presentation/src/game_bloc/bloc_screen.dart';
+import 'package:presentation/src/game_bloc/bloc_tile.dart';
+import 'package:presentation/src/game_bloc/game_bloc.dart';
 import 'package:presentation/src/pages/widgets/game_form.dart';
 
-const attemptsCount = 3;
-
-class GameField extends StatelessWidget {
+class GameField extends BlocScreen {
   const GameField({Key? key}) : super(key: key);
 
-  void _showEndGameMessage(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 1),
-      ),
+  @override
+  State<GameField> createState() => _GameFieldState();
+}
+
+class _GameFieldState extends BlocScreenState<GameField, GameBloc> {
+  _GameFieldState()
+      : super(
+          GameBloc(
+            GenerateGuessNumberUseCase(),
+            MakeAttemptUseCase(),
+          ),
+        );
+
+  void _showEndGameMessage(String message) {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            duration: const Duration(seconds: 1),
+          ),
+        );
+      },
     );
   }
 
-  void _showAttemptsRemain(BuildContext context, int guessAttemptsCount) {
-    final message = guessAttemptsCount == attemptsCount
-        ? 'Game started!'
-        : 'Attempts left: $guessAttemptsCount';
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 1),
-      ),
+  void _showAttemptsRemain(int guessAttemptsCount, BlocTileState state) {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        final message = state == BlocTileState.gameInProgress
+            ? 'Game started!'
+            : 'Attempts left: $guessAttemptsCount';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            duration: const Duration(seconds: 1),
+          ),
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: BlocConsumer<GameBloc, GameState>(
-          listener: (context, state) {
-            switch (state.runtimeType) {
-              case WinState:
-                _showEndGameMessage(context, (state as WinState).message);
-                break;
-              case LoseState:
-                _showEndGameMessage(context, (state as LoseState).message);
-                break;
-              case GameInProgressState:
-                _showAttemptsRemain(
-                    context, (state as GameInProgressState).guessAttempts);
-                break;
-            }
-          },
-          builder: (context, state) => GameForm(state: state)),
+      child: StreamBuilder<BlocTile>(
+        stream: bloc.dataStream,
+        builder: (context, snapshot) {
+          final tile = snapshot.data;
+          if (tile == null) return Center(child: CircularProgressIndicator());
+          if (tile.state == BlocTileState.win)
+            _showEndGameMessage('Correct!');
+          else if (tile.state == BlocTileState.lose)
+            _showEndGameMessage('You Lose!');
+          else if (tile.state == BlocTileState.gameInProgress)
+            _showAttemptsRemain(tile.attemptsRemain, tile.state);
+          return GameForm(
+            tile: tile,
+            bloc: bloc,
+          );
+        },
+      ),
     );
   }
 }

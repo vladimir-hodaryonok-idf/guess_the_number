@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:presentation/src/bloc/events.dart';
-import 'package:presentation/src/bloc/game_bloc.dart';
-import 'package:presentation/src/bloc/state.dart';
+import 'package:presentation/src/game_bloc/bloc_tile.dart';
+import 'package:presentation/src/game_bloc/events.dart';
+import 'package:presentation/src/game_bloc/game_bloc.dart';
 
 const maxGuessNumber = 10;
 
 class GameForm extends StatelessWidget {
-  final GameState state;
+  final BlocTile tile;
+  final GameBloc bloc;
+
   static final _formKey = GlobalKey<FormState>();
 
-  const GameForm({Key? key, required this.state}) : super(key: key);
+  const GameForm({
+    Key? key,
+    required this.tile,
+    required this.bloc,
+  }) : super(key: key);
 
   String? _validator(String? text) => (text != null &&
           ((int.tryParse(text) ?? -1) > maxGuessNumber ||
@@ -20,20 +25,24 @@ class GameForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<GameBloc>();
-
     return Form(
       key: _formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text('Guess the number (0..10)'),
-          state is WinState ? const Text('Correct!') : const SizedBox.shrink(),
-          state is LoseState
+          tile.state == BlocTileState.win
+              ? const Text('Correct!')
+              : const SizedBox.shrink(),
+          tile.state == BlocTileState.lose
               ? const Text('YOU LOSE!!!')
               : const SizedBox.shrink(),
           createTextFormField(bloc),
-          Buttons(state: state, formKey: _formKey, bloc: bloc)
+          Buttons(
+            tile: tile,
+            formKey: _formKey,
+            bloc: bloc,
+          ),
         ],
       ),
     );
@@ -62,13 +71,13 @@ class GameForm extends StatelessWidget {
 class Buttons extends StatelessWidget {
   const Buttons({
     Key? key,
-    required this.state,
+    required this.tile,
     required GlobalKey<FormState> formKey,
     required this.bloc,
   })  : _formKey = formKey,
         super(key: key);
 
-  final GameState state;
+  final BlocTile tile;
   final GlobalKey<FormState> _formKey;
   final GameBloc bloc;
 
@@ -79,23 +88,24 @@ class Buttons extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         TextButton(
-            onPressed:
-                state is WinState || state is LoseState || state is InitState
-                    ? () {
-                        _formKey.currentState?.reset();
-                        bloc.add(NewGameEvent());
-                      }
-                    : null,
-            child: const Text('New Game')),
+          onPressed: tile.state != BlocTileState.gameInProgress
+              ? () {
+                  _formKey.currentState?.reset();
+                  bloc.add(NewGameEvent());
+                }
+              : null,
+          child: const Text('New Game'),
+        ),
         TextButton(
-            onPressed: state is GameInProgressState
-                ? () {
-                    _formKey.currentState?.validate() ?? false
-                        ? bloc.add(MakeAttemptEvent())
-                        : null;
-                  }
-                : null,
-            child: const Text('Make a try')),
+          onPressed: tile.state == BlocTileState.gameInProgress
+              ? () {
+                  _formKey.currentState?.validate() ?? false
+                      ? bloc.add(MakeAttemptEvent())
+                      : null;
+                }
+              : null,
+          child: const Text('Make a try'),
+        ),
       ],
     );
   }

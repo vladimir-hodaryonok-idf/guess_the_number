@@ -3,6 +3,7 @@
 *.log
 *.pyc
 *.swp
+*.org
 .DS_Store
 .atom/
 .buildlog/
@@ -30,6 +31,7 @@ migrate_working_dir/
 .packages
 .pub-cache/
 .pub/
+.org
 /build/
 
 # Web related
