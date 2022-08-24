@@ -1,0 +1,8 @@
+name: domain
+description: Domain Layer
+version: 1.0.0
+
+publish_to: 'none'
+
+environment:
+  sdk: '>=2.17.6 <3.0.0'
