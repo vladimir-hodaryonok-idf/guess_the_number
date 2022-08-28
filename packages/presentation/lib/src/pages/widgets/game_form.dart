@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:presentation/src/game_bloc/bloc_tile.dart';
 import 'package:presentation/src/game_bloc/events.dart';
 import 'package:presentation/src/game_bloc/game_bloc.dart';
@@ -7,14 +8,13 @@ const maxGuessNumber = 10;
 
 class GameForm extends StatelessWidget {
   final BlocTile tile;
-  final GameBloc bloc;
-
-  static final _formKey = GlobalKey<FormState>();
+  static final GameBloc bloc = GetIt.I.get<GameBloc>();
+  static final GlobalKey<FormState> _formKey =
+      GetIt.I.get<GlobalKey<FormState>>();
 
   const GameForm({
     Key? key,
     required this.tile,
-    required this.bloc,
   }) : super(key: key);
 
   String? _validator(String? text) => (text != null &&
@@ -40,8 +40,6 @@ class GameForm extends StatelessWidget {
           createTextFormField(bloc),
           Buttons(
             tile: tile,
-            formKey: _formKey,
-            bloc: bloc,
           ),
         ],
       ),
@@ -72,14 +70,12 @@ class Buttons extends StatelessWidget {
   const Buttons({
     Key? key,
     required this.tile,
-    required GlobalKey<FormState> formKey,
-    required this.bloc,
-  })  : _formKey = formKey,
-        super(key: key);
+  }) : super(key: key);
 
   final BlocTile tile;
-  final GlobalKey<FormState> _formKey;
-  final GameBloc bloc;
+  static final GameBloc bloc = GetIt.I.get<GameBloc>();
+  static final GlobalKey<FormState> _formKey =
+      GetIt.I.get<GlobalKey<FormState>>();
 
   @override
   Widget build(BuildContext context) {

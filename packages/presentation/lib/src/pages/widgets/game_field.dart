@@ -61,7 +61,6 @@ class _GameFieldState extends BlocScreenState<GameField, GameBloc> {
             _showAttemptsRemain(tile.attemptsRemain, tile.attemptsRemain);
           return GameForm(
             tile: tile,
-            bloc: bloc,
           );
         },
       ),
