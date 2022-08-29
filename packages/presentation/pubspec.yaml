@@ -1,5 +1,5 @@
 name: presentation
-description: A starting point for Dart libraries or applications.
+description: Presentation
 version: 1.0.0
 
 publish_to: 'none'
@@ -12,8 +12,11 @@ dependencies:
   flutter:
     sdk: flutter
   get_it: ^7.2.0
+  injectable: ^1.5.3
   domain:
     path: ../domain
 
 dev_dependencies:
   lints: ^2.0.0
+  build_runner: 2.2.0
+  injectable_generator: 1.5.4

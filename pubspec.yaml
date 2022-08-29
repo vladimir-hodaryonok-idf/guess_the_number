@@ -10,9 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
-  cupertino_icons: ^1.0.2
+  get_it: ^7.2.0
+  injectable: ^1.5.3
   presentation:
     path: packages/presentation
   domain:
@@ -23,6 +22,8 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^2.0.0
+  build_runner: 2.2.0
+  injectable_generator: 1.5.4
 
 flutter:
 

@@ -3,6 +3,6 @@ import 'package:guess_the_number/di/injector.dart';
 import 'package:presentation/presentation.dart';
 
 void main() async{
-  await initInjector();
+  configureDependencies();
   runApp(const MyApp());
 }

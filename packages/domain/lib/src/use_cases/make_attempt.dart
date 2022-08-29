@@ -1,9 +1,11 @@
 import 'package:domain/domain.dart';
-import 'package:domain/src/use_cases/base/base_use_case_in_out.dart';
 import 'package:domain/src/use_cases/utils/extensions.dart';
+import 'package:injectable/injectable.dart';
+import 'package:domain/src/use_cases/base/base_use_case_in_out.dart';
 
-const noAttempts = 1;
+const noAttempts = 0;
 
+@injectable
 class MakeAttemptUseCase
     extends BaseUseCaseInOut<AttemptParams, AttemptResult> {
   @override

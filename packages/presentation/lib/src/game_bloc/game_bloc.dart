@@ -1,10 +1,13 @@
 import 'package:domain/domain.dart';
+import 'package:injectable/injectable.dart';
 import 'package:presentation/src/constants/init_values.dart';
 import 'package:presentation/src/game_bloc/bloc.dart';
 import 'package:presentation/src/game_bloc/bloc_tile.dart';
 import 'package:presentation/src/game_bloc/events.dart';
 
+@lazySingleton
 abstract class GameBloc extends Bloc {
+  @factoryMethod
   factory GameBloc(
     GenerateGuessNumberUseCase generateGuessNumber,
     MakeAttemptUseCase makeAttempt,

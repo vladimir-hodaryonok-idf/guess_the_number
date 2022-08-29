@@ -1,11 +1,6 @@
 import 'package:get_it/get_it.dart';
-import 'package:domain/domain.dart';
+import 'package:injectable/injectable.dart';
+import 'package:domain/src/di/domain_injector.config.dart';
 
-Future<void> initDomainModule() async {
-  initUseCaseModule();
-}
-
-void initUseCaseModule() {
-  GetIt.I.registerFactory(() => GenerateGuessNumberUseCase());
-  GetIt.I.registerFactory(() => MakeAttemptUseCase());
-}
+@InjectableInit(initializerName: r'$initDomain')
+void configureDomainDependencies(GetIt getIt) => $initDomain(getIt);

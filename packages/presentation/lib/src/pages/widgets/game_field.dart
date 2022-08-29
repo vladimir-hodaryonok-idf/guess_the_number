@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:presentation/src/constants/init_values.dart';
 import 'package:presentation/src/game_bloc/bloc_screen.dart';
 import 'package:presentation/src/game_bloc/bloc_tile.dart';
@@ -14,7 +13,7 @@ class GameField extends BlocScreen {
 }
 
 class _GameFieldState extends BlocScreenState<GameField, GameBloc> {
-  _GameFieldState() : super(GetIt.I.get<GameBloc>());
+  _GameFieldState() : super();
 
   void _showEndGameMessage(String message) {
     WidgetsBinding.instance.addPostFrameCallback(

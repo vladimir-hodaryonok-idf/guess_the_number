@@ -1,7 +1,12 @@
 import 'package:domain/domain.dart';
+import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
 import 'package:presentation/presentation.dart';
 
-Future<void> initInjector() async {
-  initPresentationModule();
-  initDomainModule();
+final getIt = GetIt.instance;
+
+@InjectableInit()
+void configureDependencies() {
+  configurePresentationDependencies(getIt);
+  configureDomainDependencies(getIt);
 }

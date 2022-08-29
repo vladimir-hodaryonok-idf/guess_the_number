@@ -6,6 +6,12 @@ publish_to: 'none'
 
 dependencies:
   get_it: ^7.2.0
+  injectable: ^1.5.3
 
 environment:
   sdk: '>=2.17.6 <3.0.0'
+
+dev_dependencies:
+  lints: ^2.0.0
+  build_runner: 2.2.0
+  injectable_generator: 1.5.4
