@@ -8,6 +8,10 @@ Future<void> initPresentationModule() async {
 }
 
 void initMainPageModule() {
+  // for reviewers...
+  // i decided to use singleton to avoid pass a GameBloc instance
+  // to widget constructors, which lay lower on widget tree
+  // same for Global key
   GetIt.I.registerLazySingleton<GameBloc>(
     () => GameBloc(
       GetIt.I.get<GenerateGuessNumberUseCase>(),

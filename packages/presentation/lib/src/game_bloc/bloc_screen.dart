@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:presentation/src/game_bloc/bloc.dart';
 
 abstract class BlocScreen extends StatefulWidget {
@@ -8,6 +8,7 @@ abstract class BlocScreen extends StatefulWidget {
 abstract class BlocScreenState<BS extends BlocScreen, B extends Bloc>
     extends State<BS> {
   BlocScreenState(Bloc this.bloc);
+
   final bloc;
 
   @override

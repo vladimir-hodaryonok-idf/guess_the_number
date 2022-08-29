@@ -9,7 +9,10 @@ abstract class GameBloc extends Bloc {
     GenerateGuessNumberUseCase generateGuessNumber,
     MakeAttemptUseCase makeAttempt,
   ) =>
-      GameBlocImpl(makeAttempt, generateGuessNumber);
+      GameBlocImpl(
+        makeAttempt,
+        generateGuessNumber,
+      );
 
   void add(BlocEvent event);
 }
@@ -19,7 +22,10 @@ class GameBlocImpl extends BlocImpl implements GameBloc {
   final MakeAttemptUseCase _makeAttemptUseCase;
   int _suggestedNumber = blocTileInitValue;
 
-  GameBlocImpl(this._makeAttemptUseCase, this._generateGuessNumberUseCase) {
+  GameBlocImpl(
+    this._makeAttemptUseCase,
+    this._generateGuessNumberUseCase,
+  ) {
     eventStream.listen(
       (event) {
         if (event is MakeAttemptEvent)
