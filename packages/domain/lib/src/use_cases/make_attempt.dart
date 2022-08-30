@@ -14,9 +14,10 @@ class MakeAttemptUseCase
         params.attemptsRemain != noAttempts) {
       return WinAttempt();
     }
-    if (params.attemptsRemain == noAttempts) return LoseAttempt();
+    final attemptsRemain = params.attemptsRemain.decrement();
+    if (attemptsRemain == noAttempts) return LoseAttempt();
     return FailAttempt(
-      attemptsRemain: params.attemptsRemain.decrement(),
+      attemptsRemain: attemptsRemain,
     );
   }
 }

@@ -14,8 +14,6 @@ dependencies:
   injectable: ^1.5.3
   presentation:
     path: packages/presentation
-  domain:
-    path: packages/domain
 
 dev_dependencies:
   flutter_test:

@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:presentation/src/game_bloc/bloc_tile.dart';
-import 'package:presentation/src/game_bloc/events.dart';
+import 'package:presentation/src/game_bloc/show_snack_bar_event.dart';
 
 abstract class Bloc {
   Stream<BlocTile> get dataStream;
 
-  Stream<BlocEvent> get eventStream;
+  Stream<UiMessage> get uiEventStream;
 
   dynamic get tile;
 
@@ -15,36 +15,28 @@ abstract class Bloc {
 
 abstract class BlocImpl implements Bloc {
   final _data = StreamController<BlocTile>();
-  final _events = StreamController<BlocEvent>();
+  final _uiEventStream = StreamController<UiMessage>();
   BlocTile _blocTile = BlocTile.init();
 
   @override
   Stream<BlocTile> get dataStream => _data.stream;
 
   @override
-  Stream<BlocEvent> get eventStream => _events.stream;
+  Stream<UiMessage> get uiEventStream => _uiEventStream.stream;
 
   @override
   BlocTile get tile => _blocTile;
 
   @protected
-  void emit(
-    BlocTileState? status, [
-    int? attemptsRemain,
-    int? guessedNumber,
-    int? suggestedNumber,
-  ]) {
-    _blocTile = _blocTile.copyWith(
-      status,
-      guessedNumber,
-      suggestedNumber,
-      attemptsRemain,
-    );
-    _data.sink.add(_blocTile);
-  }
+  void emitUiEvent(UiMessage event) => _uiEventStream.add(event);
 
   @protected
-  void handleEvent(BlocEvent event) => _events.add(event);
+  void emit(
+    BlocTile tile,
+  ) {
+    _blocTile = tile;
+    _data.sink.add(_blocTile);
+  }
 
   @override
   void initState() {}
