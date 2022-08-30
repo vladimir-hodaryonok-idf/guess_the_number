@@ -1,67 +1,108 @@
 import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
 import 'package:presentation/src/constants/init_values.dart';
 import 'package:presentation/src/game_bloc/bloc.dart';
 import 'package:presentation/src/game_bloc/bloc_tile.dart';
-import 'package:presentation/src/game_bloc/events.dart';
+import 'package:presentation/src/game_bloc/show_snack_bar_event.dart';
 
 abstract class GameBloc extends Bloc {
   factory GameBloc(
     GenerateGuessNumberUseCase generateGuessNumber,
     MakeAttemptUseCase makeAttempt,
+    GlobalKey<FormState> formKey,
   ) =>
       GameBlocImpl(
         makeAttempt,
         generateGuessNumber,
+        formKey,
       );
 
-  void add(BlocEvent event);
+  Function()? onNewGamePressed();
+
+  Function()? onMakeAttemptPressed();
+
+  void onTextChange(String text);
+
+  String? validate(String? text);
+
+  GlobalKey<FormState> get formKey;
 }
 
 class GameBlocImpl extends BlocImpl implements GameBloc {
   final GenerateGuessNumberUseCase _generateGuessNumberUseCase;
   final MakeAttemptUseCase _makeAttemptUseCase;
+  final GlobalKey<FormState> formKey;
   int _suggestedNumber = blocTileInitValue;
 
   GameBlocImpl(
     this._makeAttemptUseCase,
     this._generateGuessNumberUseCase,
-  ) {
-    eventStream.listen(
-      (event) {
-        if (event is MakeAttemptEvent)
-          _makeAttempt();
-        else if (event is NewGameEvent)
-          _newGame();
-        else if (event is SetSuggestedNumberEvent)
-          _setSuggestedNumber(event.number);
-      },
-    );
-  }
+    this.formKey,
+  );
 
   @override
   void initState() {
     super.initState();
-    _updateData(tile);
+    emit(tile);
   }
 
-  void _updateData(BlocTile data) => emit(
-        data.state,
-        data.attemptsRemain,
-        data.suggestedNumber,
-        data.guessedNumber,
-      );
+  @override
+  Function()? onMakeAttemptPressed() =>
+      tile.state == BlocTileState.gameInProgress ||
+              tile.state == BlocTileState.newGame
+          ? _makeAttempt
+          : null;
 
   @override
-  void add(BlocEvent event) => handleEvent(event);
+  Function()? onNewGamePressed() =>
+      tile.state != BlocTileState.gameInProgress &&
+              tile.state != BlocTileState.newGame
+          ? _newGame
+          : null;
+
+  @override
+  void onTextChange(String text) {
+    formKey.currentState?.validate() ?? false
+        ? _setSuggestedNumber(int.tryParse(text) ?? 0)
+        : null;
+  }
+
+  @override
+  String? validate(String? text) => (text != null &&
+          ((int.tryParse(text) ?? -1) > maxGuessNumber ||
+              (int.tryParse(text) ?? -1) < 0))
+      ? 'Incorrect input'
+      : null;
 
   void _makeAttempt() {
+    if ((formKey.currentState?.validate() ?? false) == false) return;
+    _emitNewState();
+    _showUiEvent();
+  }
+
+  void _emitNewState() {
     final result = _makeAttemptUseCase(_createAttemptParams());
     if (result is LoseAttempt)
-      emit(BlocTileState.lose);
+      emit(tile.copyWith(BlocTileState.lose));
     else if (result is WinAttempt)
-      emit(BlocTileState.win);
+      emit(tile.copyWith(BlocTileState.win));
     else if (result is FailAttempt)
-      emit(BlocTileState.gameInProgress, result.attemptsRemain);
+      emit(
+        tile.copyWith(
+          BlocTileState.gameInProgress,
+          result.attemptsRemain,
+        ),
+      );
+  }
+
+  void _showUiEvent() {
+    if (tile.state == BlocTileState.newGame)
+      emitUiEvent(NewGameMessage());
+    else if (tile.state == BlocTileState.gameInProgress)
+      emitUiEvent(AttemptsRemainMessage(tile.attemptsRemain));
+    else if (tile.state == BlocTileState.lose)
+      emitUiEvent(LoseMessage());
+    else if (tile.state == BlocTileState.win) emitUiEvent(WinMessage());
   }
 
   AttemptParams _createAttemptParams() {
@@ -73,8 +114,20 @@ class GameBlocImpl extends BlocImpl implements GameBloc {
   }
 
   void _newGame() {
+    formKey.currentState?.reset();
+    _emitNewGameState();
+    _showUiEvent();
+  }
+
+  void _emitNewGameState() {
     final guessedNumber = _generateGuessNumberUseCase();
-    emit(BlocTileState.gameInProgress, initialAttempts, guessedNumber);
+    emit(
+      tile.copyWith(
+        BlocTileState.newGame,
+        initialAttempts,
+        guessedNumber,
+      ),
+    );
   }
 
   void _setSuggestedNumber(int number) => _suggestedNumber = number;

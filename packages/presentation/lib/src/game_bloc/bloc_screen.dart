@@ -1,15 +1,13 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:presentation/src/game_bloc/bloc.dart';
 
-abstract class BlocScreen extends StatefulWidget {
-  const BlocScreen({Key? key}) : super(key: key);
-}
+abstract class BlocScreen extends StatefulWidget {}
 
 abstract class BlocScreenState<BS extends BlocScreen, B extends Bloc>
     extends State<BS> {
-  BlocScreenState(Bloc this.bloc);
+  BlocScreenState(B this.bloc);
 
-  final bloc;
+  final B bloc;
 
   @override
   void initState() {

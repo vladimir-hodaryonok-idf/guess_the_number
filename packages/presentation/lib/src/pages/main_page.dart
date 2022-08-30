@@ -11,7 +11,7 @@ class MainPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(title),
       ),
-      body: const GameField(),
+      body: GameField(),
     );
   }
 }
