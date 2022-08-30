@@ -14,7 +14,7 @@ import '../use_cases/make_attempt.dart'
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
-_i1.GetIt $initDomain(_i1.GetIt get,
+_i1.GetIt $initGetIt(_i1.GetIt get,
     {String? environment, _i2.EnvironmentFilter? environmentFilter}) {
   final gh = _i2.GetItHelper(get, environment, environmentFilter);
   gh.factory<_i3.GenerateGuessNumberUseCase>(

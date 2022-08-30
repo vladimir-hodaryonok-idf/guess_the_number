@@ -1,21 +1,13 @@
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:presentation/src/game_bloc/game_bloc.dart';
+import 'package:injectable/injectable.dart';
+import 'package:presentation/src/di/presentation_injector.config.dart';
 
-Future<void> initPresentationModule() async {
-  initMainPageModule();
-}
+@InjectableInit()
+void configurePresentationDependencies(GetIt getIt) => $initGetIt(getIt);
 
-void initMainPageModule() {
-  GetIt.I.registerFactory<GameBloc>(
-    () => GameBloc(
-      GetIt.I.get<GenerateGuessNumberUseCase>(),
-      GetIt.I.get<MakeAttemptUseCase>(),
-      GetIt.I.get<GlobalKey<FormState>>(),
-    ),
-  );
-  GetIt.I.registerFactory<GlobalKey<FormState>>(
-    () => GlobalKey<FormState>(),
-  );
+@module
+abstract class PresentationModule {
+  @lazySingleton
+  GlobalKey<FormState> key() => GlobalKey<FormState>();
 }
