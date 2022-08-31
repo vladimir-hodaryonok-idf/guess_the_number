@@ -68,11 +68,11 @@ class Buttons extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         TextButton(
-          onPressed: bloc.onNewGamePressed(),
+          onPressed: tile.isNewGameBtnEnabled ? bloc.makeAttempt : null,
           child: const Text('New Game'),
         ),
         TextButton(
-          onPressed: bloc.onMakeAttemptPressed(),
+          onPressed: tile.isMakeATryBtnEnabled ? bloc.newGame : null,
           child: const Text('Make a try'),
         ),
       ],
