@@ -17,9 +17,9 @@ abstract class GameBloc extends Bloc {
         formKey,
       );
 
-  Function()? onNewGamePressed();
+  void newGame();
 
-  Function()? onMakeAttemptPressed();
+  void makeAttempt();
 
   void onTextChange(String text);
 
@@ -47,20 +47,6 @@ class GameBlocImpl extends BlocImpl implements GameBloc {
   }
 
   @override
-  Function()? onMakeAttemptPressed() =>
-      tile.state == BlocTileState.gameInProgress ||
-              tile.state == BlocTileState.newGame
-          ? _makeAttempt
-          : null;
-
-  @override
-  Function()? onNewGamePressed() =>
-      tile.state != BlocTileState.gameInProgress &&
-              tile.state != BlocTileState.newGame
-          ? _newGame
-          : null;
-
-  @override
   void onTextChange(String text) {
     formKey.currentState?.validate() ?? false
         ? _setSuggestedNumber(int.tryParse(text) ?? 0)
@@ -74,7 +60,8 @@ class GameBlocImpl extends BlocImpl implements GameBloc {
       ? 'Incorrect input'
       : null;
 
-  void _makeAttempt() {
+  @override
+  void makeAttempt() {
     if ((formKey.currentState?.validate() ?? false) == false) return;
     _emitNewState();
     _showUiEvent();
@@ -113,7 +100,7 @@ class GameBlocImpl extends BlocImpl implements GameBloc {
     );
   }
 
-  void _newGame() {
+  void newGame() {
     formKey.currentState?.reset();
     _emitNewGameState();
     _showUiEvent();
