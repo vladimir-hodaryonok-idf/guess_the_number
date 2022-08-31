@@ -5,6 +5,7 @@ version: 1.0.0
 publish_to: 'none'
 
 dependencies:
+  get_it: ^7.2.0
   injectable: ^1.5.3
 
 environment:
