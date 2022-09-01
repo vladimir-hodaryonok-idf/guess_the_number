@@ -1,4 +1,3 @@
-import 'package:domain/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:presentation/src/game_bloc/bloc_screen.dart';
 import 'package:presentation/src/game_bloc/bloc_tile.dart';
@@ -12,14 +11,6 @@ class GameField extends BlocScreen {
 }
 
 class _GameFieldState extends BlocScreenState<GameField, GameBloc> {
-  _GameFieldState()
-      : super(
-          GameBloc(
-            GenerateGuessNumberUseCase(),
-            MakeAttemptUseCase(),
-            GlobalKey<FormState>(),
-          ),
-        );
 
   @override
   void initState() {
