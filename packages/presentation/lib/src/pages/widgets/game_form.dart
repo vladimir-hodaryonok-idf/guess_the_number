@@ -39,7 +39,7 @@ class GameForm extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: TextFormField(
         onChanged: bloc.onTextChange,
-        validator: bloc.validate,
+        validator: (_) => bloc.tile.validateResult,
         maxLength: 2,
         keyboardType: TextInputType.number,
         decoration: const InputDecoration(
@@ -68,11 +68,11 @@ class Buttons extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         TextButton(
-          onPressed: tile.isNewGameBtnEnabled ? bloc.makeAttempt : null,
+          onPressed: tile.isNewGameBtnEnabled ? bloc.newGame : null,
           child: const Text('New Game'),
         ),
         TextButton(
-          onPressed: tile.isMakeATryBtnEnabled ? bloc.newGame : null,
+          onPressed: tile.isMakeATryBtnEnabled ? bloc.makeAttempt : null,
           child: const Text('Make a try'),
         ),
       ],

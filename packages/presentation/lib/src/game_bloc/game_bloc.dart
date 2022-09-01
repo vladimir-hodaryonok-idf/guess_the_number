@@ -5,7 +5,7 @@ import 'package:presentation/src/game_bloc/bloc.dart';
 import 'package:presentation/src/game_bloc/bloc_tile.dart';
 import 'package:presentation/src/game_bloc/show_snack_bar_event.dart';
 
-abstract class GameBloc extends Bloc {
+abstract class GameBloc extends Bloc<BlocTile> {
   factory GameBloc(
     GenerateGuessNumberUseCase generateGuessNumber,
     MakeAttemptUseCase makeAttempt,
@@ -23,46 +23,48 @@ abstract class GameBloc extends Bloc {
 
   void onTextChange(String text);
 
-  String? validate(String? text);
-
   GlobalKey<FormState> get formKey;
 }
 
-class GameBlocImpl extends BlocImpl implements GameBloc {
+class GameBlocImpl extends BlocImpl<BlocTile> implements GameBloc {
   final GenerateGuessNumberUseCase _generateGuessNumberUseCase;
   final MakeAttemptUseCase _makeAttemptUseCase;
   final GlobalKey<FormState> formKey;
-  int _suggestedNumber = blocTileInitValue;
+  int? _suggestedNumber;
 
   GameBlocImpl(
     this._makeAttemptUseCase,
     this._generateGuessNumberUseCase,
     this.formKey,
-  );
+  ) : super(BlocTile.init());
 
   @override
   void initState() {
     super.initState();
-    emit(tile);
+    emit(tile, false);
   }
 
   @override
   void onTextChange(String text) {
-    formKey.currentState?.validate() ?? false
-        ? _setSuggestedNumber(int.tryParse(text) ?? 0)
-        : null;
+    _setSuggestedNumber(int.tryParse(text));
+    _validate();
+    formKey.currentState?.validate();
+  }
+
+  void _validate() {
+    if (_suggestedNumber == null) return;
+    final isValid =
+        _suggestedNumber! > maxGuessNumber || _suggestedNumber!.isNegative;
+    emit(tile.copyWith(validateResult: isValid ? 'Incorrect input' : null));
   }
 
   @override
-  String? validate(String? text) => (text != null &&
-          ((int.tryParse(text) ?? -1) > maxGuessNumber ||
-              (int.tryParse(text) ?? -1) < 0))
-      ? 'Incorrect input'
-      : null;
-
-  @override
   void makeAttempt() {
-    if ((formKey.currentState?.validate() ?? false) == false) return;
+    if (_suggestedNumber == null) {
+      emit(tile.copyWith(validateResult: 'Incorrect input'));
+      formKey.currentState?.validate();
+      return;
+    }
     _emitNewState();
     _showUiEvent();
   }
@@ -70,14 +72,14 @@ class GameBlocImpl extends BlocImpl implements GameBloc {
   void _emitNewState() {
     final result = _makeAttemptUseCase(_createAttemptParams());
     if (result is LoseAttempt)
-      emit(tile.copyWith(BlocTileState.lose));
+      emit(tile.copyWith(state: BlocTileState.lose));
     else if (result is WinAttempt)
-      emit(tile.copyWith(BlocTileState.win));
+      emit(tile.copyWith(state: BlocTileState.win));
     else if (result is FailAttempt)
       emit(
         tile.copyWith(
-          BlocTileState.gameInProgress,
-          result.attemptsRemain,
+          state: BlocTileState.gameInProgress,
+          attemptsRemain: result.attemptsRemain,
         ),
       );
   }
@@ -95,7 +97,7 @@ class GameBlocImpl extends BlocImpl implements GameBloc {
   AttemptParams _createAttemptParams() {
     return AttemptParams(
       guessNumber: tile.guessedNumber,
-      suggestedNumber: _suggestedNumber,
+      suggestedNumber: _suggestedNumber ?? blocTileInitValue,
       attemptsRemain: tile.attemptsRemain,
     );
   }
@@ -110,12 +112,12 @@ class GameBlocImpl extends BlocImpl implements GameBloc {
     final guessedNumber = _generateGuessNumberUseCase();
     emit(
       tile.copyWith(
-        BlocTileState.newGame,
-        initialAttempts,
-        guessedNumber,
+        state: BlocTileState.newGame,
+        attemptsRemain: initialAttempts,
+        guessedNumber: guessedNumber,
       ),
     );
   }
 
-  void _setSuggestedNumber(int number) => _suggestedNumber = number;
+  void _setSuggestedNumber(int? number) => _suggestedNumber = number;
 }
