@@ -52,19 +52,15 @@ class GameBlocImpl extends BlocImpl<BlocTile> implements GameBloc {
   }
 
   void _validate() {
-    if (_suggestedNumber == null) return;
-    final isValid =
-        _suggestedNumber! > maxGuessNumber || _suggestedNumber!.isNegative;
+    final isValid = _suggestedNumber! > maxGuessNumber ||
+        _suggestedNumber!.isNegative ||
+        _suggestedNumber == null;
     emit(tile.copyWith(validateResult: isValid ? 'Incorrect input' : null));
   }
 
   @override
   void makeAttempt() {
-    if (_suggestedNumber == null) {
-      emit(tile.copyWith(validateResult: 'Incorrect input'));
-      formKey.currentState?.validate();
-      return;
-    }
+    if (tile.validateResult != null) return;
     _emitNewState();
     _showUiEvent();
   }

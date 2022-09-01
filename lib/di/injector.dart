@@ -2,7 +2,7 @@
 import 'package:domain/domain.dart';
 import 'package:presentation/presentation.dart';
 
-Future<void> initInjector() async {
+void initInjector() {
   initPresentationModule();
   initDomainModule();
 }

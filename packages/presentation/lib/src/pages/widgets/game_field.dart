@@ -11,7 +11,6 @@ class GameField extends BlocScreen {
 }
 
 class _GameFieldState extends BlocScreenState<GameField, GameBloc> {
-
   @override
   void initState() {
     super.initState();
