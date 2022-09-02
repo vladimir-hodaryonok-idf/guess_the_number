@@ -1,3 +1,3 @@
-abstract class BaseUseCaseInOut<In,Out>{
+abstract class BaseUseCaseInOut<In, Out> {
   Out call(In params);
 }

@@ -1,7 +1,8 @@
 import 'package:domain/domain.dart';
 import 'package:domain/src/use_cases/base/base_use_case_in_out.dart';
+import 'package:domain/src/use_cases/utils/extensions.dart';
 
-const noAttempts = 1;
+const noAttempts = 0;
 
 class MakeAttemptUseCase
     extends BaseUseCaseInOut<AttemptParams, AttemptResult> {
@@ -11,11 +12,10 @@ class MakeAttemptUseCase
         params.attemptsRemain != noAttempts) {
       return WinAttempt();
     }
-    if (params.attemptsRemain == noAttempts) return LoseAttempt();
-    return FailAttempt(attemptsRemain: params.attemptsRemain.decrement());
+    final attemptsRemain = params.attemptsRemain.decrement();
+    if (attemptsRemain == noAttempts) return LoseAttempt();
+    return FailAttempt(
+      attemptsRemain: attemptsRemain,
+    );
   }
-}
-
-extension Decrementer on int {
-  int decrement() => this - 1;
 }

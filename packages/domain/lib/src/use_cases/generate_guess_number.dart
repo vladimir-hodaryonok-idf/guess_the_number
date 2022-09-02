@@ -5,9 +5,7 @@ const maxGuessNumber = 10;
 
 class GenerateGuessNumberUseCase extends BaseUseCaseOut<int> {
   @override
-  int call() => _generateGuessNumber();
-
-  int _generateGuessNumber() {
+  int call() {
     final random = Random();
     final number = random.nextInt(maxGuessNumber);
     print('Hint: number is $number');
