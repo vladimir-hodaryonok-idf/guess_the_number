@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    tags:
+      - release*
 jobs:
   commit_master:
     name: commit to master
@@ -33,5 +35,4 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: build/app/outputs/flutter-apk/app-release.apk
-          tag: test_v1.1
           token: ${{ secrets.TOKEN_G_H }}
