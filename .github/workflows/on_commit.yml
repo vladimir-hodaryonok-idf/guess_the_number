@@ -30,7 +30,7 @@ jobs:
       - name: Build release
         run: flutter build apk --release
       - name: Publish
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1.1.1
         with:
           artifacts: build/app/outputs/flutter-apk/app-release.apk
           token: ${{ secrets.TOKEN_G_H }}
