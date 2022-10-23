@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-    tags:
-      - release*
+      tags:
+        - release*
 jobs:
   commit_master:
     name: commit to master
