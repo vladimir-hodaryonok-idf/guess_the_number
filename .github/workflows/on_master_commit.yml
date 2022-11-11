@@ -28,7 +28,7 @@ jobs:
           flutter pub get
       - name: App Pub Get
         run: flutter pub get
-      - uses: malinskiy/action-android/emulator-run-cmd@release/0.1.1
+      - uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
         with:
           cmd: flutter doctor -v
           api: 25
