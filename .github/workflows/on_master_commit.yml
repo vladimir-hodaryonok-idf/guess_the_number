@@ -41,11 +41,11 @@ jobs:
         run: flutter pub get
       - name: Test
         uses: reactivecircus/android-emulator-runner@v2
-          with:
-            api-level: ${{ matrix.api-level }}
-            arch: x86_64
-            profile: Nexus 6
-            script: flutter test integration_test --verbose
+        with:
+          api-level: ${{ matrix.api-level }}
+          arch: x86_64
+          profile: Nexus 6
+          script: flutter test integration_test --verbose
 
 #      - uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
 #        with:
