@@ -1,7 +1,8 @@
 name: on_master_commit
 
 on:
-  push:
+  pull_request:
+    types: [ opened, reopened ]
     branches:
       - master
 jobs:
@@ -27,11 +28,21 @@ jobs:
           flutter pub get
       - name: App Pub Get
         run: flutter pub get
-      - name: Build release
-        run: flutter build apk --release
-      - name: Publish
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: build/app/outputs/flutter-apk/app-release.apk
-          tag: releases
-          token: ${{ secrets.TOKEN_G_H }}
+      - uses: malinskiy/action-android/emulator-run-cmd@release/0.1.1
+          with:
+            cmd: flutter doctor -v
+            api: 25
+            tag: default
+            abi: x86
+      - run: sdkmanager platform-tools
+      - run: adb devices
+      - run: echo $ANDROID_HOME
+      - run: flutter drive --driver integration_test/driver.dart --target integration_test/int_test.dart
+#      - name: Build release
+#        run: flutter build apk --release
+#      - name: Publish
+#        uses: ncipollo/release-action@v1
+#        with:
+#          artifacts: build/app/outputs/flutter-apk/app-release.apk
+#          tag: releases
+#          token: ${{ secrets.TOKEN_G_H }}
