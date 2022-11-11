@@ -8,7 +8,7 @@ on:
 jobs:
   commit_master:
     name: commit to master
-    runs-on: macOS-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         api-level:
@@ -24,11 +24,6 @@ jobs:
         with:
           flutter-version: '3.0.5'
           channel: 'stable'
-#      - name: Install Android SDK
-#        uses: malinskiy/action-android/install-sdk@release/0.1.4
-#      - run: echo $ANDROID_HOME
-##      - run: sdkmanager --install "ndk;23.1.7779620"
-#      - run: sdkmanager --install "build-tools;30.0.3"
       - name: Domain Pub Get
         run: |
           cd packages/domain/
@@ -40,20 +35,12 @@ jobs:
       - name: App Pub Get
         run: flutter pub get
       - name: Test
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
           profile: Nexus 6
           script: flutter test integration_test --verbose
-
-#      - uses: malinskiy/action-android/emulator-run-cmd@release/0.1.4
-#        with:
-#          cmd: flutter test integration_test
-#          api: 31
-#          cmdOptions: -no-snapshot-save -noaudio -no-boot-anim -cores 2 -memory 3072 -no-window
-#          tag: google_apis
-#          abi: x86_64
 
 #      - name: Build release
 #        run: flutter build apk --release
